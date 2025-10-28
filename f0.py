@@ -1,0 +1,1 @@
+simulate("main", Unlocks, {Items.Weird_Substance: 999999, Items.Power: 0}, {}, 0, 2)
