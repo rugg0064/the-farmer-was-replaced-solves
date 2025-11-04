@@ -5,9 +5,7 @@
 import utils
 
 def manhattanDistance(a, b):
-	diff = aToB(a, b)
-	diff = absPosition(diff)
-	return getX(diff) + getY(diff)
+	return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 # Subtracts two positions a - b
 def subtract(a, b):

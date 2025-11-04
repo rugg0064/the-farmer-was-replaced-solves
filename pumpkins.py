@@ -21,7 +21,7 @@ def getPumpkinAction(bounds):
 			plant(Entities.Pumpkin)
 		if can_harvest():
 			pumpkinSet.add(positions.getPos())
-		if len(pumpkinSet) == boundaries.getSize(bounds):
+		if len(pumpkinSet) == boundaries.getArea(bounds):
 			use_item(Items.Fertilizer)
 			harvest()
 			pumpkinSet = set()
@@ -43,7 +43,7 @@ def doBigPumpkin(bounds):
 			plant(Entities.Pumpkin)
 		if can_harvest():
 			pumpkinSet.add(positions.getPos())
-		if len(pumpkinSet) == boundaries.getSize(bounds):
+		if len(pumpkinSet) == boundaries.getArea(bounds):
 			harvest()
 			pumpkinSet = set()
 	serpentine.serpentine(f, boundsMin, boundsMax)

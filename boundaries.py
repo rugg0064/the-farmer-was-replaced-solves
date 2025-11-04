@@ -39,9 +39,17 @@ def getTopLeft(bounds):
 	return (bounds[0][1], bounds[1][0])
 def getTopRight(bounds):
 	return bounds[1]
+# Returns the size in number of squares as (x,y)
 def getSize(bounds):
-	d = positions.aToB(getMin(bounds), positions.add(getMax(bounds), (1, 1)))
+	return positions.aToB(getMin(bounds), positions.add(getMax(bounds), (1, 1)))
+def getArea(bounds):
+	d = getSize(bounds)
 	return positions.getX(d) * positions.getY(d)
+def getWidth(bounds):
+	return positions.aToB(getBottomLeft(bounds), getTopRight(bounds))[0]+1
+def getHeight(bounds):
+	return positions.aToB(getBottomLeft(bounds), getTopRight(bounds))[1]+1
+
 
 # bottomLeft is the starting point (x,y)
 # size is the size(x,y)
@@ -87,3 +95,12 @@ def getAllPositions(bounds):
 		for y in range(positions.getY(getMin(bounds)), positions.getY(getMax(bounds)) + 1):
 			ret.add((x,y))
 	return ret
+
+# Returns a copy of a boundary with the opposite edge pulled <direction> by <amount>. IE a 2x2 shrunk East will because a 1x2 with bottom-left moved East
+# Does not error check
+def shrink(bounds, direction, amount):
+	if direction in {East, North}: # Shrink the min
+		return ((positions.add(getBottomLeft(bounds), positions.mul(directions.directionToVector[direction], amount) )), (getTopRight(bounds)))
+	else: # Shrink the max
+		return (getBottomLeft(bounds), (positions.add(getTopRight(bounds), positions.mul(directions.directionToVector[direction], amount) )))
+

@@ -74,9 +74,43 @@ def last(list):
 	if len(list) == 0:
 		return None
 	return list[len(list)-1]
+
+# [0] but returns None if empty
+def first(list):
+	if len(list) == 0:
+		return None
+	return list[0]
 	
 def copy(list):
 	newList = []
 	for value in list:
 		newList.append(value)
 	return newList
+
+def qsort(list, comparator):
+	swap = []
+	for _ in range(len(list)):
+		swap.append(None)
+	# quick_print(swap)
+	def qsortHelper(list, lowBound, highBound):
+		# quick_print(lowBound, highBound)
+		if highBound <= lowBound:
+			return
+		pivot = list[lowBound]
+		lowIndex = lowBound
+		highIndex = highBound
+		for i in range(lowBound+1, highBound+1):
+			if comparator(list[i], pivot):
+				swap[lowIndex] = list[i]
+				lowIndex += 1
+			else:
+				swap[highIndex] = list[i]
+				highIndex -= 1
+			swap[lowIndex] = pivot
+		for i in range(len(swap)):
+			list[i] = swap[i]
+		if highBound > lowIndex+1:
+			qsortHelper(list, lowIndex+1, highBound)
+		if lowIndex-1 >lowBound:
+			qsortHelper(list, lowBound, lowIndex-1)
+	qsortHelper(list, 0, len(list)-1)

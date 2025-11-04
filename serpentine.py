@@ -79,7 +79,7 @@ def serpentine(action, boundsMin, boundsMax):
 		serpentineStep()
 
 def doForAll(movementPlan, action, bounds):
-	size = boundaries.getSize(bounds)
+	size = boundaries.getArea(bounds)
 	positionsDone = set()
 	while len(positionsDone) != size:
 		action()

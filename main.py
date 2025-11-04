@@ -1,5 +1,7 @@
+import lists
 import newSerpentine
 import boundaries
+import positionsFast
 import pumpkins
 import sets
 import positions
@@ -8,6 +10,8 @@ import graphs
 import directions
 import mazes
 import serpentine
+import snakePath
+import paths
 
 #set_world_size(6)
 #set_execution_speed(6)
@@ -22,8 +26,8 @@ def makeJob(bounds):
 		global i
 		while True:
 			set = action()
-			quick_print(len(set), boundaries.getSize(bounds) * 0.75)
-			if len(set) < boundaries.getSize(bounds) * 0.50:
+			quick_print(len(set), boundaries.getArea(bounds) * 0.75)
+			if len(set) < boundaries.getArea(bounds) * 0.50:
 				plan()
 			else:
 				diff = sets.diff(set, boundaries.getAllPositions(bounds))
@@ -104,8 +108,8 @@ def doMazes():
 	#change_hat(Hats.Brown_Hat)
 	#positions.gotoPos((3, 3))
 
-	mazeSize = 9
-	numDrones = 8 # max_drones()
+	mazeSize = 22
+	numDrones = 16 # max_drones()
 
 	set_world_size(mazeSize)
 	mazes.createMaze(mazeSize)
@@ -254,7 +258,7 @@ def doMazes():
 								else:
 									quick_print("Finished program", get_tick_count(), get_time())
 									return
-							graph = graphs.mergeGraphs(graph, resp)
+							graphs.mergeGraphsMutate(resp, graph)
 						global totalTime
 						totalTime += get_time() - start
 						quick_print("totalTime", totalTime)
@@ -269,7 +273,7 @@ def doMazes():
 						if num_drones() != numDrones:
 							quick_print("Found mismatch in drones. Killing self to restart")
 							return graph
-						if numNewEdges > 89:
+						if numNewEdges > 999:
 							quick_print("Found new edges, killing")
 							# Found enough edges to force reset the system
 							return graph
@@ -315,18 +319,103 @@ def doMazes():
 	# 	else:
 	# 		mazes.recreateMaze(mazeSize)
 
+def harvestingTests():
+	def makeJob(bounds):
+		def f():
+			path = snakePath.makeSnakePath(bounds, boundaries.getBottomLeft(bounds), East)
+			pathDirDict = paths.pathToDirDict(path, True)
+			positions.gotoPos(path[0])
+			quick_print(pathDirDict)
+			while True:
+				move(pathDirDict[positions.getPos()])
+				if get_ground_type() == Grounds.Grassland:
+					till()
+					plant(Entities.Carrot)
+				if can_harvest():
+					harvest()
+					plant(Entities.Carrot)
+		return f	
+	
+	def makeJobWheat(bounds):
+		def f():
+			path = snakePath.makeSnakePath(bounds, boundaries.getBottomLeft(bounds), East)
+			pathDirDict = paths.pathToDirDict(path, True)
+			positions.gotoPos(path[0])
+			quick_print(pathDirDict)
+			while True:
+				move(pathDirDict[positions.getPos()])
+				if can_harvest():
+					harvest()
+					plant(Entities.Grass)
+		return f	
+
+	quick_print("11111!23")
+	# path = snakePath.makeSnakePath(, , East)
+	# pathDirDict = paths.pathToDirDict(path, True)
+	spawn_drone(sunflowers.makeSunflowersJob((boundaries.fromBottomLeft((0,16), (22, 6)))))
+	# for x in range(0, 32, 4):
+	# 	for y in range(0, 32, 4):
+	# 		if x == 0 and y == 0:
+	# 			continue
+	# 		quick_print(x, y)
+	# 		spawn_drone(makeJob(boundaries.fromBottomLeft((x, y), (5,5))))
+
+
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((6, 0), (6,6))))
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((12, 0), (6,6))))
+
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((0, 6), (6,6))))
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((6, 6), (6,6))))
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((12, 6), (6,6))))
+
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((0, 12), (6,6))))
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((6, 12), (6,6))))
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((12, 12), (6,6))))
+
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((0, 18), (6,4))))
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((6, 18), (6,4))))
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((12, 18), (6,4))))
+
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((18, 0), (4,6))))
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((18, 6), (4,6))))
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((18, 12), (4,6))))
+
+
+	# spawn_drone(makeJob(boundaries.fromBottomLeft((18, 18), (4,4))))
+
+
+	spawn_drone(makeJobWheat(boundaries.fromBottomLeft((0, 8), (4,4))))
+	spawn_drone(makeJobWheat(boundaries.fromBottomLeft((4, 8), (4,4))))
+	spawn_drone(makeJobWheat(boundaries.fromBottomLeft((0, 12), (4,4))))
+	spawn_drone(makeJobWheat(boundaries.fromBottomLeft((4, 12), (4,4))))
+	spawn_drone(makeJob(boundaries.fromBottomLeft((10, 8), (12,8))))
+
+	spawn_drone(makeJob(boundaries.fromBottomLeft((0, 0), (10, 8))))
+	makeJob(boundaries.fromBottomLeft((10, 0), (12,8)))()
+
 def main():
 	#carrots()
-	# doMazes()
+	#doMazes()
 
-	mazeSize = 9
-	numDrones = 16 # max_drones()
-	set_world_size(mazeSize)
-	mazes.createMaze(mazeSize)
-	graph = mazes.createInitialGraphParallel()
-	quick_print(graph)
-	quick_print(positions.getPos())
-	quick_print(get_time())
+	# mazeSize = 10	
+	# numDrones = 16 # max_drones()
+	# set_world_size(mazeSize)
+	# mazes.createMaze(mazeSize)
+	# graph = mazes.createInitialGraphParallel()
+	# quick_print(graph)
+	# quick_print(positions.getPos())
+	# quick_print(str(get_time()) + " seconds")
+	# graphs.renderPositionGraph(graph)
+
+	# x = [4,1,2,3,5,12,3,5,12,5]
+	# print(x)
+	# qsort(x)
+	# print(x)
+	# cpy = [4,1,2,3,5,12,3,5,12,5]
+	# cpy.sort()
+	# print(cpy)
+
+	sunflowers.singleSunflower(boundaries.fromBottomLeft((0, 0), (22,8)))
 
 
 

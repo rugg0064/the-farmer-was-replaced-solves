@@ -20,7 +20,8 @@ def createInitialGraphHelperParallel(
 	shouldBacktrack = True,
 	depth = 0
 ):
-	debug = positions.getPos() == (3,6)
+	#debug = positions.getPos() == (3,6)
+	debug = False
 	if debug:
 		quick_print("DEBUG ACTIVATES")
 	graph = graphs.newGraph()
@@ -55,10 +56,18 @@ def createInitialGraphHelperParallel(
 				move(direction)
 				# If we are here, we know we need to backtrack
 				# This might generate more handlers, 
-				g, newHandlers = createInitialGraphHelperParallel(directions.oppositeDirection[direction], True, depth+1)
 				if debug:
-					quick_print("DEBUG ACTIVATES 7")
-				graphs.mergeGraphsMutate(g, graph)
+					quick_print("DEBUG ACTIVATES 9 RECURSING", get_time(), depth)
+				oldGraph = graph
+				g, newHandlers = createInitialGraphHelperParallel(directions.oppositeDirection[direction], True, depth+1)
+				graph = g
+				if debug:
+					quick_print("DEBUG ACTIVATES 7 FINISHED RECURSION", get_time(), depth)
+					quick_print(g)
+					quick_print(graph)
+				graphs.mergeGraphsMutate(oldGraph, graph)
+				if debug:
+					quick_print("DEBUG ACTIVATES 10 FINISHED MERGE", get_time(), depth)
 				for newHandler in newHandlers:
 					handlers.add(newHandler)
 			else:
@@ -72,14 +81,25 @@ def createInitialGraphHelperParallel(
 		move(direction)
 		# When a drone recurses itself, it inherits shouldBacktrack because we need to be able to go all the way back if necessary
 		# Save the return value in case this drone created more drones down the way
-		g, newHandlers = createInitialGraphHelperParallel(directions.oppositeDirection[direction], shouldBacktrack, depth+1)
 		if debug:
-			quick_print("DEBUG ACTIVATES 8")
+			quick_print("DEBUG ACTIVATES 10 RECURSING", get_time(), depth)
+		oldGraph = graph
+		g, newHandlers = createInitialGraphHelperParallel(directions.oppositeDirection[direction], shouldBacktrack, depth+1)
+		graph = g
+		if debug:
+			quick_print("DEBUG ACTIVATES 8 FINISHED RECURSION", get_time(), depth)
+			quick_print(g)
+			quick_print(graph)
 		# quick_print("Finished recursive call with", g, newHandlers)
-		graphs.mergeGraphsMutate(g, graph)
+		graphs.mergeGraphsMutate(oldGraph, graph)
+		if debug:
+			quick_print("DEBUG ACTIVATES 11 FINISHED MERGE", get_time(), depth)
 		for newHandler in newHandlers:
 			handlers.add(newHandler)
 	if debug:
+		if get_pos_x() == 1 and get_pos_y == 1 and get_entity_type() == Entities.Tree:
+			harvest()
+
 		quick_print("DEBUG ACTIVATES 4")
 	if shouldBacktrack:
 		if debug:
@@ -91,7 +111,7 @@ def createInitialGraphHelperParallel(
 	# quick_print("Returning values", graph, handlers)
 	if debug:
 		quick_print("DEBUG ACTIVATES 6")
-		quick_print("DEBUG ACTIVATES RETURNING!!!!!!", depth)
+		quick_print("DEBUG ACTIVATES RETURNING!!!!!!", get_time(), depth)
 	return graph, handlers
 	# Tests says this has almost the same time as just returning everything
 	# Attempt to process handlers and graph if possible

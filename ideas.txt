@@ -1,0 +1,40 @@
+Ideas for sunflower
+First obviously you just plant everywhere.
+Need to harvest in order of highest value
+So record the locations and orders. Once everything is panet, mass harvest in order. Once empty, replant
+I don't think we want to replant while harvesting beacuse if you get a big number then you have to wait for it to grow.
+
+The order of harvest could be a TSP problem
+Supposedly has some good estimation algorithms. Will research.
+
+Jumping ahead to multi drone. I think each drone can take a subsection to plant. Record it's entries. Then kill self and parent can merge. Then 
+No--- Each child can generate their TSP path first. Then kill self to return it.
+In order to make sure every drone harvests their maximums. We need some drones to wait extra long to continue to harvest.
+So we will build a big scheduling algorithms
+
+For replanting we just need to do a basic loop. The larger the map is the less it matters that you go over the last 10
+
+
+Data - 
+Drone
+A - 15 15 15 14
+B - 15 14 14 14
+C - 14 14 13 13
+D - 12 12 12 12
+As we can see, Drone D only has 12's. So it needs to harvest last
+And drone A has the most 15s at 3x15, so it will need to harvest 3 times
+So we can build a schedule for harvesting
+
+Table of which tile to harvest
+Which level to harvest
+    15    14    13  12
+idx of tile to harvest
+A | 1 2 3 4
+B | 1     2 3 4
+C |       1 2   4 5
+D |                 1 2 3 4
+Better than this is to abuse the little shared data we have. Resource counts.
+You can plant carrots to reduce the number. This can be used to find consensus to go to next number.
+One more solution could be to use statistics and assume everyone else has a certain amount of each. I wonder how this would perform
+
+Technically it's Hamiltonian path problem not Traveling salesman problem beacuse we dont need to return to the same spot
