@@ -74,7 +74,7 @@ def serpentine(action, boundsMin, boundsMax):
 			return
 		move(lastDirection)
 	while True:
-		if positions.isInBounds(positions.getPos(), boundsMin, boundsMax):
+		if boundaries.isInBounds((boundsMin, boundsMax), positions.getPos()):
 			action()
 		serpentineStep()
 

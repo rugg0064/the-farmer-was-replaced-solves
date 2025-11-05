@@ -1,3 +1,4 @@
+import f2
 import lists
 import newSerpentine
 import boundaries
@@ -415,7 +416,36 @@ def main():
 	# cpy.sort()
 	# print(cpy)
 
-	sunflowers.singleSunflower(boundaries.fromBottomLeft((0, 0), (22,8)))
+	numDrones = 16
+
+	def j(bounds):
+		def f():
+			sunflowers.multiSunflower(bounds, numDrones)		 
+		return f
+
+	spawn_drone(j(boundaries.fromBottomLeft((6, 0), (6,6))))
+	spawn_drone(j(boundaries.fromBottomLeft((12, 0), (6,6))))
+
+	spawn_drone(j(boundaries.fromBottomLeft((0, 6), (6,6))))
+	spawn_drone(j(boundaries.fromBottomLeft((6, 6), (6,6))))
+	spawn_drone(j(boundaries.fromBottomLeft((12, 6), (6,6))))
+
+	spawn_drone(j(boundaries.fromBottomLeft((0, 12), (6,6))))
+	spawn_drone(j(boundaries.fromBottomLeft((6, 12), (6,6))))
+	spawn_drone(j(boundaries.fromBottomLeft((12, 12), (6,6))))
+
+	spawn_drone(j(boundaries.fromBottomLeft((0, 18), (6,4))))
+	spawn_drone(j(boundaries.fromBottomLeft((6, 18), (6,4))))
+	spawn_drone(j(boundaries.fromBottomLeft((12, 18), (6,4))))
+
+	spawn_drone(j(boundaries.fromBottomLeft((18, 0), (4,6))))
+	spawn_drone(j(boundaries.fromBottomLeft((18, 6), (4,6))))
+	spawn_drone(j(boundaries.fromBottomLeft((18, 12), (4,6))))
+
+
+	spawn_drone(j(boundaries.fromBottomLeft((18, 18), (4,4))))
+
+	sunflowers.multiSunflower(boundaries.fromBottomLeft((0, 0), (6,6)), numDrones)
 
 
 

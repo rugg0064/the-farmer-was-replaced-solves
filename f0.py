@@ -1,1 +1,1 @@
-simulate("main", Unlocks, {Items.Weird_Substance: 999999, Items.Power: 999999, Items.Carrot: 999999}, {}, random()*100, 6)
+simulate("main", Unlocks, {Items.Weird_Substance: 999999, Items.Power: 999999, Items.Carrot: 999999, Items.Wood: 999999, Items.Hay: 999999}, {}, random()*100, 8)
