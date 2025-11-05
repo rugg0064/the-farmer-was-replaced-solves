@@ -418,34 +418,34 @@ def main():
 
 	numDrones = 16
 
-	def j(bounds):
+	def j(bounds, id):
 		def f():
-			sunflowers.multiSunflower(bounds, numDrones)		 
+			sunflowers.multiSunflower(bounds, id, numDrones)		 
 		return f
 
-	spawn_drone(j(boundaries.fromBottomLeft((6, 0), (6,6))))
-	spawn_drone(j(boundaries.fromBottomLeft((12, 0), (6,6))))
+	spawn_drone(j(boundaries.fromBottomLeft((6, 0), (6,6)), 1))
+	spawn_drone(j(boundaries.fromBottomLeft((12, 0), (6,6)), 2))
 
-	spawn_drone(j(boundaries.fromBottomLeft((0, 6), (6,6))))
-	spawn_drone(j(boundaries.fromBottomLeft((6, 6), (6,6))))
-	spawn_drone(j(boundaries.fromBottomLeft((12, 6), (6,6))))
+	spawn_drone(j(boundaries.fromBottomLeft((0, 6), (6,6)), 3))
+	spawn_drone(j(boundaries.fromBottomLeft((6, 6), (6,6)), 4))
+	spawn_drone(j(boundaries.fromBottomLeft((12, 6), (6,6)), 5))
 
-	spawn_drone(j(boundaries.fromBottomLeft((0, 12), (6,6))))
-	spawn_drone(j(boundaries.fromBottomLeft((6, 12), (6,6))))
-	spawn_drone(j(boundaries.fromBottomLeft((12, 12), (6,6))))
+	spawn_drone(j(boundaries.fromBottomLeft((0, 12), (6,6)), 6))
+	spawn_drone(j(boundaries.fromBottomLeft((6, 12), (6,6)), 7))
+	spawn_drone(j(boundaries.fromBottomLeft((12, 12), (6,6)), 8))
 
-	spawn_drone(j(boundaries.fromBottomLeft((0, 18), (6,4))))
-	spawn_drone(j(boundaries.fromBottomLeft((6, 18), (6,4))))
-	spawn_drone(j(boundaries.fromBottomLeft((12, 18), (6,4))))
+	spawn_drone(j(boundaries.fromBottomLeft((0, 18), (6,4)), 9))
+	spawn_drone(j(boundaries.fromBottomLeft((6, 18), (6,4)), 10))
+	spawn_drone(j(boundaries.fromBottomLeft((12, 18), (6,4)), 11))
 
-	spawn_drone(j(boundaries.fromBottomLeft((18, 0), (4,6))))
-	spawn_drone(j(boundaries.fromBottomLeft((18, 6), (4,6))))
-	spawn_drone(j(boundaries.fromBottomLeft((18, 12), (4,6))))
+	spawn_drone(j(boundaries.fromBottomLeft((18, 0), (4,6)), 12))
+	spawn_drone(j(boundaries.fromBottomLeft((18, 6), (4,6)), 13))
+	spawn_drone(j(boundaries.fromBottomLeft((18, 12), (4,6)), 14))
 
 
-	spawn_drone(j(boundaries.fromBottomLeft((18, 18), (4,4))))
+	spawn_drone(j(boundaries.fromBottomLeft((18, 18), (4,4)), 15))
 
-	sunflowers.multiSunflower(boundaries.fromBottomLeft((0, 0), (6,6)), numDrones)
+	sunflowers.multiSunflower(boundaries.fromBottomLeft((0, 0), (6,6)), 0, numDrones)
 
 
 

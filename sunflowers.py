@@ -123,7 +123,7 @@ def singleSunflower(bounds):
 		harvestAll()
 		resetPositionPetals()
 
-def multiSunflower(bounds, numDrones):
+def multiSunflower(bounds, id, numDrones):
 	totalTiles = boundaries.getArea(bounds)
 	path = snakePath.makeSnakePath(bounds, boundaries.getBottomLeft(bounds), East)
 	positions.gotoPos(path[0])
@@ -163,7 +163,7 @@ def multiSunflower(bounds, numDrones):
 			plant(Entities.Sunflower)
 			measureRecord()
 			move(pathPosDirs[positions.getPos()])
-		quick_print(positionPetals)
+		# quick_print(positionPetals)
 	def doPlant(): # Plants all but the last square
 		for i in range(len(path) - 1):
 			plant(Entities.Sunflower)
@@ -181,7 +181,7 @@ def multiSunflower(bounds, numDrones):
 		levelIndex = 0
 		for i in range(15, 6 , -1): #[15, 7] Iterate through each measure of flowers to ensure we get the bonus
 			entries = positionPetals[i] # Reference to the active collection of flowers
-			quick_print(i, "posp", entries)
+			# quick_print(i, "posp", entries)
 			for _ in range(0, len(entries)): # Now actual sort sequence. For each entry.. Get the closest
 				closestPos = None
 				shortestDistance = 9999999
@@ -191,38 +191,56 @@ def multiSunflower(bounds, numDrones):
 						closestPos = pos
 						shortestDistance = distance
 				# Found closest entry. Add it to path and remove for next iteration
-				quick_print(i, levelIndex, closestPos, harvestPaths[levelIndex])
+				# quick_print(i, levelIndex, closestPos, harvestPaths[levelIndex])
 				harvestPaths[levelIndex].append(closestPos)
 				lastPos = closestPos
 				entries.remove(closestPos)	
 			# quick_print(thisLevelPath)
-			quick_print("finish lvl with", harvestPaths[levelIndex])
+			# quick_print("finish lvl with", harvestPaths[levelIndex])
 			levelIndex += 1
 	def harvestAll():
-		numberToHarvest = totalTiles - 10
 		for index in range(len(harvestPaths)):
+			first = True
 			while getStage() != index:
-				quick_print("On stage", getStage(), "waiting for", index)
+				if first:
+					quick_print(id, "On stage", getStage(), "waiting for", index, startWoodCount)
+				first = False
 				continue
 			levelPath = harvestPaths[index]
+			quick_print(id, "Proceeding to stage", getStage(), levelPath)
 			for pos in levelPath:
 				positions.gotoPos(pos)
-				while not can_harvest():
+				first = True
+				while not can_harvest() and get_entity_type() == Entities.Sunflower:
+					if first:
+						quick_print(id, "CANT HARVEST", get_entity_type())
+					first = False
 					pass
+				quick_print(id, "harvesting", positions.getPos(), measure(), getStage())
 				harvest()
-				numberToHarvest += 1
-			plant(Entities.Carrot)
+			quick_print(id, "done harvesting, doing carrot", index, getStage())
+			harvest()
+			planted = plant(Entities.Carrot)
+			if not planted:
+				quick_print(id, "Failed to plant")
+				while True:
+					pass
 			harvest()
 	resetPositionPetals()
 	tillAll()
+	first = True
 	while True:
 		while getStage() != "Plant":
-			quick_print("On stage", getStage(), "waiting for", "Plant")
+			if first:
+				quick_print(id, "On stage", getStage(), "waiting for", "Plant")
+				pass
+			first = False
 		doPlant()
 		plant(Entities.Carrot)
 		harvest()
 		plant(Entities.Sunflower)
 		measureRecord()
+		quick_print(id, "petals", positionPetals)
 		createPath()
 		harvestAll()
 		resetPositionPetals()
